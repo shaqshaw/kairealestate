@@ -27,44 +27,50 @@ async function daily(){
 
     try{
 
-        //fetch all listings meeting criteria and in san antonio
-        await axios.get(keys.GOLDEN_FILTER)
-        
-        .then(async function(res){
+        //deleta all previous day's findings
+        await Listing.deleteMany({})
 
-            //parse data to get listings
-            const $ = cheerio.load(res.data);
-            const listings = $('.HomeCardContainer a').each((i, el) => {
-                const address = $(el).text();
-                const link = $(el).attr('href');
+        .then(async function(){
 
-                if( address!== '' && address!=="Local rules require you to be signed in to see more photos." && address !== " Sign in for price "){
-                    address="NOT AVAILABLE";
-                }
+            //fetch all listings meeting criteria and in san antonio
+            await axios.get(keys.GOLDEN_FILTER)
+            
+            .then(async function(res){
 
-                listing_links.push({
-                    address,
-                    link: `https://www.redfin.com` + link
-                })
+                //parse data to get listings
+                const $ = cheerio.load(res.data);
+                const listings = $('.HomeCardContainer a').each((i, el) => {
+                    let address = $(el).text();
+                    const link = $(el).attr('href');
 
-            });
+                    if( address!== '' && address!=="Local rules require you to be signed in to see more photos." && address !== " Sign in for price "){
+                        address="NOT AVAILABLE";
+                    }
 
-            //store listings in db
-            const randomVar = await Promise.all(
-                listing_links.map( async function (listing){
-                    await new Listing({
-                        address: listing.address,
-                        link: listing.link
-                    }).save()
-                })
-            )
+                    listing_links.push({
+                        address,
+                        link: `https://www.redfin.com` + link
+                    })
 
-            //disconnect db
-            .then( async function(){
-                await mongoose.connection.close(function(){
-                    console.log("Analysis Done.\n DB Updated.");
-                    console.log("DB Disconnected.");
-                    process.exit(0); 
+                });
+
+                //store listings in db
+                const randomVar = await Promise.all(
+                    listing_links.map( async function (listing){
+                        await new Listing({
+                            address: listing.address,
+                            link: listing.link
+                        }).save()
+                    })
+                )
+
+                //disconnect db
+                .then( async function(){
+                    await mongoose.connection.close(function(){
+                        console.log("Analysis Done.\n DB Updated.");
+                        console.log("DB Disconnected.");
+                        process.exit(0); 
+                    })
                 })
             })
         })
