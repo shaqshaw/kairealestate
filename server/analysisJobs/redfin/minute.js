@@ -37,17 +37,16 @@ async function minute(){
 
         //scrape the link of the one found above to calculate ARV
         if (interestedListing !== null){
-            await request(`https://www.redfin.com/city/16657/TX/San-Antonio/filter/property-type=house,max-price=600k,remarks=fixer+upper,include=forsale+mlsfsbo+construction+fsbo+sold-1yr,viewport=29.48102:29.38369:-98.3798:-98.50683`, async function(error, response, html){
+            await axios.get(interestedListing.link).then((res) => {
 
-                if(!error && response.statusCode ===200){
-                    const $ = cheerio.load(html);
-                    const listings = $('.HomeCardContainer a').each((i, el) => {
-                        const address = $(el).text();
-                        const link = $(el).attr('href');
-                        console.log(address, link);
-                    });
-                }
-            });
+                const $ = cheerio.load(res.data);
+                const listings = $('.SimilarSoldSection .SimilarCardReact a').each((i, el) => {
+                    const address = $(el).text();
+                    const link = $(el).attr('href');
+                    console.log(address, link);
+                });
+
+            }).then()
         }
 
         //if ARV is a decent price then text
