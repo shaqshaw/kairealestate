@@ -72,7 +72,7 @@ async function minute(){
         })
 
     } catch (err){
-        conaole.log(err);
+        console.log(err);
     }
 
 };

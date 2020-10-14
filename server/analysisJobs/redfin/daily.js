@@ -47,11 +47,12 @@ async function daily(){
                         address="NOT AVAILABLE";
                     }
 
-                    listing_links.push({
-                        address,
-                        link: `https://www.redfin.com` + link
-                    })
-
+                    if(link!== undefined){
+                        listing_links.push({
+                            address,
+                            link: `https://www.redfin.com` + link
+                        })
+                    }
                 });
 
                 //store listings in db
