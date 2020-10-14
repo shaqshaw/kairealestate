@@ -1,7 +1,7 @@
 module.exports= (app) =>{
     const keys = require('../config/keys.js');
 
-    app.get(`/trades`, async(req, res) => {
+    app.get(`/sanantonio`, async(req, res) => {
         
         //connect to mongodb
         const mongoose = require('mongoose');
