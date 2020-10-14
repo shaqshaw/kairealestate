@@ -1,6 +1,10 @@
 module.exports = {
     MONGO_URI: process.env.MONGO_URI,
+    GOLDEN_FILTER: process.env.GOLDEN_FILTER,
 
     TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
-    TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN
-};
+    TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
+    TWILIO_NUMBER: process.env.TWILIO_AUTH_TOKEN,
+
+    SUBSCRIBER_NUMBER: process.env.SUBSCRIBER_NUMBER
+}

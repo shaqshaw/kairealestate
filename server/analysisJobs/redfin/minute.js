@@ -53,7 +53,7 @@ async function minute(){
                     //calculate ARV
 
                     //if ARV is a decent price then text
-                    await TwilioTexting(foundListing(name, listing), 18135254872)
+                    await TwilioTexting(foundListing(name, listing), keys.SUBSCRIBER_NUMBER)
                     .then(async function(){
                         await mongoose.connection.close(function(){
                             console.log("Analysis Done.\n DB Updated.");

@@ -28,7 +28,7 @@ async function daily(){
     try{
 
         //fetch all listings meeting criteria and in san antonio
-        await axios.get(`https://www.redfin.com/city/16657/TX/San-Antonio/filter/property-type=house,max-price=600k,remarks=fixer+upper,include=forsale+mlsfsbo+construction+fsbo+sold-1yr,viewport=29.48102:29.38369:-98.3798:-98.50683`)
+        await axios.get(keys.GOLDEN_FILTER)
         
         .then(async function(res){
 
