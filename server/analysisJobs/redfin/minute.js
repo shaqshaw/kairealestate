@@ -1,6 +1,6 @@
-const request =  require('request');
 const cheerio =  require('cheerio');
 const mongoose = require('mongoose');
+const TwilioTexting = require('../../services/TwilioTexting');
 const keys = require('../../config/keys');
 const interestedListing = null;
 
@@ -14,7 +14,7 @@ async function minute(){
     })
     .then(() => {
         console.log("DB Connected!"); 
-        console.log("Fetching All Data Listing from Redfin!"); 
+        console.log("Scraping Links!"); 
         console.log("Analyzing Data ...");
     })
     .catch(err => {
@@ -33,26 +33,44 @@ async function minute(){
             }catch(error){
                 console.log(err);
             }
-        });
+        })
 
-        //scrape the link of the one found above to calculate ARV
-        if (interestedListing !== null){
-            await axios.get(interestedListing.link).then((res) => {
+        .then(async function(){
 
-                const $ = cheerio.load(res.data);
-                const listings = $('.SimilarSoldSection .SimilarCardReact a').each((i, el) => {
-                    const address = $(el).text();
-                    const link = $(el).attr('href');
-                    console.log(address, link);
-                });
+            //scrape the link of the one found above to calculate ARV
+            if (interestedListing !== null){
+                await axios.get(interestedListing.link).then((res) => {
 
-            }).then()
-        }
+                    const $ = cheerio.load(res.data);
+                    const listings = $('.SimilarSoldSection .SimilarCardReact a').each((i, el) => {
+                        const address = $(el).text();
+                        const link = $(el).attr('href');
+                        console.log(address, link);
+                    });
 
-        //if ARV is a decent price then text
+                }).then(async function(){
 
+                    //calculate ARV
 
-        
+                    //if ARV is a decent price then text
+                    await TwilioTexting(foundListing(name, listing), 18135254872)
+                    .then(async function(){
+                        await mongoose.connection.close(function(){
+                            console.log("Analysis Done.\n DB Updated.");
+                            console.log("DB Disconnected.");
+                            process.exit(0); 
+                        })
+                    });
+                })
+            }else{
+                await mongoose.connection.close(function(){
+                    console.log("Analysis Done.\n DB Updated.");
+                    console.log("DB Disconnected.");
+                    process.exit(0); 
+                })
+            }
+        })
+
     } catch (err){
         conaole.log(err);
     }

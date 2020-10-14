@@ -5,7 +5,7 @@ module.exports= (app) =>{
         
         //connect to mongodb
         const mongoose = require('mongoose');
-        require('../models/sanantonio.js');
+        require('../models/listing.js');
         const Listing = mongoose.model('listing');
         mongoose.connect(keys.MONGO_URI);
 
