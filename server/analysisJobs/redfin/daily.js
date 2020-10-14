@@ -43,7 +43,7 @@ async function daily(){
                     let address = $(el).text();
                     const link = $(el).attr('href');
 
-                    if( address!== '' && address!=="Local rules require you to be signed in to see more photos." && address !== " Sign in for price "){
+                    if( address=== '' || address==="Local rules require you to be signed in to see more photos." || address === " Sign in for price "){
                         address="NOT AVAILABLE";
                     }
 
