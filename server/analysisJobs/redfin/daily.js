@@ -40,14 +40,11 @@ async function daily(){
                 //parse data to get listings
                 const $ = cheerio.load(res.data);
                 const listings = $('.HomeCardContainer a').each((i, el) => {
-                    let address = $(el).text();
+                    const address = $(el).text();
                     const link = $(el).attr('href');
 
-                    if( address=== '' || address==="Local rules require you to be signed in to see more photos." || address === " Sign in for price "){
-                        address="NOT AVAILABLE";
-                    }
-
-                    if(link!== undefined){
+                    //signing in should give more prices
+                    if(link!== undefined && address!== '' && address!=="Local rules require you to be signed in to see more photos." && address !== " Sign in for price "){
                         listing_links.push({
                             address,
                             link: `https://www.redfin.com` + link
